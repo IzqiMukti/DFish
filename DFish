@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+  </head>
+
+  <body>
+    <button onclick="forward()">ON</button>
+    <button onclick="reverse()">OFF</button>
+    <h4>Current Time: <span id="waktu"></span> </h4>
+    <script>
+    function forward(){
+    $.ajax({
+    url:'https://api.arkademy.com:8443/v0/arkana/device/IO/d-fish/pwm/control',
+    type : 'POST',
+    headers : {
+    'accept' : 'application/json',
+    'content-type' : 'application/json',
+    'Authorization': 'Bearer MzM1MjIzMTQ5MS4zOTU5MzEyOg=='
+    },
+    data : '{ "controls":{"4":"10","frequency":"50","count":"5000","5":"10","frequency":"50","count":"5000"}}',
+    success:function(response){
+
+    alert(response);
+    },
+    error:function(err){
+
+    alert("error!",err);
+    }
+    })
+    }
+
+    function reverse(){
+    $.ajax({
+    url:'https://api.arkademy.com:8443/v0/arkana/device/IO/d-fish/pwm/control',
+    type : 'POST',
+    headers : {
+    'accept' : 'application/json',
+    'content-type' : 'application/json',
+    'Authorization': 'Bearer MzM1MjIzMTQ5MS4zOTU5MzEyOg=='
+    },
+    data : '{ "controls":{"4":"5","frequency":"50","count":"5000","5":"5","frequency":"50","count":"5000"} }' ,
+    success:function(response){
+
+    alert(response);
+    },
+    error:function(err){
+
+    alert("error!",err);
+    }
+    })
+    }
+
+
+    function gerakkanServo(){
+    forward();
+    setTimeout(reverse, 2000);
+    }
+
+    function siklus_cek() {
+    var tanggal_dan_waktu_saat_ini = moment().format('YYYY-MM-DD HH:mm:ss');
+    var waktu_saat_ini = moment().format('HH:mm:ss');
+
+    document.getElementById('waktu').innerHTML=tanggal_dan_waktu_saat_ini
+
+    if(waktu_saat_ini=='09:18:00'){
+    gerakkanServo();
+    }
+
+    }
+    setInterval(siklus_cek,1000);
+    </script>
+  </body>
+</html>
